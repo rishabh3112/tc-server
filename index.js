@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const session = require('express-session')
 const mongoose = require('mongoose')
 const passport = require('passport')
 const { Strategy } = require('passport-local');
@@ -9,6 +10,7 @@ const app = express();
 // Middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(session({ secret: "DTU is full of monkeys"}))
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -19,9 +21,10 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // MongoDB connection
-mongoose.connect('mongodb://rishabh:3hulkbusters@ds159574.mlab.com:59574/travel-cash', (err) => {
-    process.stdout.write(err);
+mongoose.connect('mongodb://rishabh:3hulkbusters@ds159574.mlab.com:59574/travel-cash', { useNewUrlParser: true }, (err) => {
+    if (err) process.stdout.write(err);
 });
+mongoose.set('useCreateIndex', true);
 
 // Register routes
 app.use('/', require('./routes'))
@@ -38,4 +41,6 @@ app.use((err, req, res, next) => {
     else res.json({ error: {}, message: err.message});
 })
 
-module.exports = app;
+app.listen('3300', () => {
+    process.stdout.write('Listening at http://localhost:3300/\n');
+})
