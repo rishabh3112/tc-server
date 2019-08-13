@@ -9,21 +9,21 @@ router.get('/status', (req, res) => {
 })
 
 router.get('/status', passport.authenticate('local'), (req, res) => {
-    res.json({ message: `Travel Cash v${VERSION}`, authentication: true })
+    res.json({ user: req.user.name, message: `Travel Cash v${VERSION}`, authentication: true })
 })
 
 router.post('/register', (req, res, next) => {
-    User.register(new User({username: req.body.username}), req.body.password, (err) => {
+    User.register(new User({username: req.body.username, name: req.body.name}), req.body.password, (err) => {
         if (err) return next(err);
     })
-    res.redirect('/');
+    res.json({ success: true})
 })
 
 router.post('/login', passport.authenticate('local'), function(req, res) {
-    res.redirect('/');
+    res.json({ success: true})
 });
 
 router.get('/logout', function(req, res) {
     req.logout();
-    res.redirect('/');
+    res.json({ success: true});
 });
