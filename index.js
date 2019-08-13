@@ -7,7 +7,7 @@ const { Strategy } = require('passport-local');
 const Logger = require('webpack-log');
 
 const app = express();
-process.log = Logger({ name: "travel-cash" })
+process.log = Logger({ name: "server" })
 // Middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
