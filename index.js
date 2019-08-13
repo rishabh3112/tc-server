@@ -10,7 +10,7 @@ const app = express();
 // Middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(session({ secret: "DTU is full of monkeys"}))
+app.use(session({ secret: "DTU is full of monkeys", resave: false, saveUninitialized: true,}))
 app.use(passport.initialize());
 app.use(passport.session());
 
