@@ -4,9 +4,10 @@ const session = require('express-session')
 const mongoose = require('mongoose')
 const passport = require('passport')
 const { Strategy } = require('passport-local');
+const Logger = require('webpack-log');
 
 const app = express();
-
+process.log = Logger({ name: "travel-cash" })
 // Middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -42,5 +43,5 @@ app.use((err, req, res, next) => {
 })
 
 app.listen('3300', () => {
-    process.stdout.write('Listening at http://localhost:3300/\n');
+    process.log.info('Listening at http://localhost:3300/');
 })

@@ -14,7 +14,7 @@ router.post('/register', (req, res, next) => {
     User.register(new User({username: req.body.username, name: req.body.name}), req.body.password, (err) => {
         if (err) return next(err);
     })
-
+    process.log.info(`New User ${req.body.name}("${req.body.username}") added 🎉`)
     res.json({ success: true})
 })
 
