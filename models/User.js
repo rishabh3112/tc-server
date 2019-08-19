@@ -12,6 +12,8 @@ const Travel = new mongoose.Schema({
 
 const User = new mongoose.Schema({
     name:           { type: String },
+    age:            { type: Number },
+    gender:         { type: String },
     cash:           { type: Number, min: 0, default: 0 },
     isTraveling:    { type: Boolean },
     history:        [Travel],
