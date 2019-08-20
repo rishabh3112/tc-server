@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const MongoSession = require('connect-mongo')(session);
 const mongoose = require('mongoose')
@@ -21,11 +22,19 @@ mongoose.set('useCreateIndex', true);
 // Middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(cors());
+app.use(cookieParser())
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization");
+    res.header("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+    next();
+});
 app.use(session({
     secret: "DTU is full of monkeys",
-    cookie: {maxAge: 2628000000},
-    storage: new MongoSession({ mongooseConnection: mongoose.connection }),
+    store: new MongoSession({ mongooseConnection: mongoose.connection }),
+    resave: true,
+    saveUninitialized: true,
+    cookie: { secure: false }
 }))
 app.use(passport.initialize());
 app.use(passport.session());
@@ -51,7 +60,7 @@ app.use((err, req, res, next) => {
     else res.json({ error: {}, message: err.message});
 })
 
-const port = process.env.PORT || 80
+const port = process.env.PORT || 8080
 
 app.listen(port, () => {
     process.log.info(`Listening at http://localhost:${port}/`);
