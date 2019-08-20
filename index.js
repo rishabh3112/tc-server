@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const MongoSession = require('connect-mongo')(session);
 const mongoose = require('mongoose')
 const passport = require('passport')
 const { Strategy } = require('passport-local');
@@ -24,12 +25,7 @@ app.use(cors());
 app.use(session({
     secret: "DTU is full of monkeys",
     cookie: {maxAge: 2628000000},
-    storage: new(require('express-sessions'))({
-        storage: 'mongodb',
-        instance: mongoose
-    }),
-    resave: false,
-    saveUninitialized: true,
+    storage: new MongoSession({ mongooseConnection: mongoose.connection }),
 }))
 app.use(passport.initialize());
 app.use(passport.session());
