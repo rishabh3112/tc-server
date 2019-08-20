@@ -5,12 +5,14 @@ const mongoose = require('mongoose')
 const passport = require('passport')
 const { Strategy } = require('passport-local');
 const Logger = require('webpack-log');
+const cors = require('cors')
 
 const app = express();
 process.log = Logger({ name: "server" })
 // Middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(cors);
 app.use(session({ secret: "DTU is full of monkeys", resave: false, saveUninitialized: true,}))
 app.use(passport.initialize());
 app.use(passport.session());
