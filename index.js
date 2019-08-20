@@ -9,11 +9,28 @@ const cors = require('cors')
 
 const app = express();
 process.log = Logger({ name: "server" })
+
+// MongoDB connection
+mongoose.connect('mongodb://rishabh:3hulkbusters@ds159574.mlab.com:59574/travel-cash', { useNewUrlParser: true }, (err) => {
+    if (err) process.log.error(err);
+});
+mongoose.set('useCreateIndex', true);
+
+
 // Middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
-app.use(session({ secret: "DTU is full of monkeys", resave: false, saveUninitialized: true,}))
+app.use(session({
+    secret: "DTU is full of monkeys",
+    cookie: {maxAge: 2628000000},
+    storage: new(require('express-sessions'))({
+        storage: 'mongodb',
+        instance: mongoose
+    }),
+    resave: false,
+    saveUninitialized: true,
+}))
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -22,12 +39,6 @@ const User = require('./models/User');
 passport.use(new Strategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-// MongoDB connection
-mongoose.connect('mongodb://rishabh:3hulkbusters@ds159574.mlab.com:59574/travel-cash', { useNewUrlParser: true }, (err) => {
-    if (err) process.stdout.write(err);
-});
-mongoose.set('useCreateIndex', true);
 
 // Register routes
 app.use('/', require('./routes'))
