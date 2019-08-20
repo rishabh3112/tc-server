@@ -42,6 +42,8 @@ app.use((err, req, res, next) => {
     else res.json({ error: {}, message: err.message});
 })
 
-app.listen('3300', () => {
-    process.log.info('Listening at http://localhost:3300/');
+const port = process.env.PORT || 80
+
+app.listen(port, () => {
+    process.log.info(`Listening at http://localhost:${port}/`);
 })
