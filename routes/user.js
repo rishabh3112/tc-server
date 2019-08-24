@@ -63,10 +63,10 @@ router.get('/endtravel', (req, res, next) => {
         if (err) return next(new Error("Cannot update user _"));
         user.isTravelling = false;
         let cash = 0;
-        user.history.reduce((p, c) => {
-            cash += !c.cash ? 0 : c.cash;
+        let totalCash = user.history.reduce((cash, c) => {
+            return cash + !c.cash ? 0 : c.cash;
         });
-        user.cash = cash;
+        user.cash = totalCash;
         user.save();
     })
     req.user.isTravelling = false;
