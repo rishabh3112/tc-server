@@ -66,7 +66,7 @@ router.get('/endtravel', (req, res, next) => {
         user.history.map((el) => {
             if (!el.cash) continue;
             cash += el.cash;
-            process.log(cash);
+            process.log.info(cash);
         });
         user.cash = cash;
         user.save();
