@@ -63,7 +63,7 @@ router.get('/endtravel', (req, res, next) => {
         if (err) return next(new Error("Cannot update user _"));
         user.isTravelling = false;
         let cash = 0;
-        user.history.map((el) => {
+        user.history.foreach((el) => {
             if (!el.cash) continue;
             cash += el.cash;
             process.log.info(cash);
