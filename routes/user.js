@@ -16,7 +16,7 @@ router.post('/register', (req, res, next) => {
     })
     process.log.info(`New User ${req.body.name}("${req.body.username}") added 🎉`)
     res.json({ success: true})
-})
+});
 
 router.post('/login', passport.authenticate('local', {session: true}), function(req, res) {
     res.json({ success: true})

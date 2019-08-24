@@ -46,7 +46,8 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // Register routes
-app.use('/', require('./routes'))
+app.use('/user', require('./routes/user'))
+app.usechore('/vendor', require('./routes/vendor'))
 
 // Error Handler Routes
 app.use((req, res, next) => {
