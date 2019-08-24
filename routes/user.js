@@ -50,6 +50,7 @@ router.post('/travel', (req, res, next) => {
         if (err) return next(new Error("Cannot update user"));
         user.isTravelling = true;
         user.history.unshift(newTravel);
+        user.cash += req.body.cash;
         user.save();
     })
     
@@ -62,10 +63,6 @@ router.get('/endtravel', (req, res, next) => {
     User.findOne({usename: req.user.username}, (err, user) => {
         if (err) return next(new Error("Cannot update user _"));
         user.isTravelling = false;
-        let totalCash = user.history.reduce((cash, c) => {
-            return cash + !c.cash ? 0 : c.cash;
-        });
-        user.cash = totalCash;
         user.save();
     })
     req.user.isTravelling = false;
