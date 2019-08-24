@@ -5,7 +5,7 @@ const router = require('express').Router();
 
 const VERSION = require(path.resolve(__dirname, '../package.json')).version;
 
-router.get('/status', (req, res) => {
+router.get('/status', (req, res, next) => {
     if (req.isAuthenticated()) {
         if (!req.user.isUser) return next(new Error("Vendor can't request on user"));
         res.json({ user: req.user, message: `Travel Cash v${VERSION}`, authentication: true })
@@ -21,12 +21,12 @@ router.post('/register', (req, res, next) => {
     res.json({ success: true})
 });
 
-router.post('/login', passport.authenticate('local', {session: true}), function(req, res) {
+router.post('/login', passport.authenticate('local', {session: true}), function(req, res, next) {
     if (!req.user.isUser) return next(new Error("Vendor can't request on user"));
     res.json({ success: true})
 });
 
-router.get('/logout', function(req, res) {
+router.get('/logout', function(req, res, next) {
     if (!req.user.isUser) return next(new Error("Vendor can't request on user"));
     req.logout();
     res.json({ success: true});
