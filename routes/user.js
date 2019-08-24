@@ -62,7 +62,6 @@ router.get('/endtravel', (req, res, next) => {
     User.findOne({usename: req.user.username}, (err, user) => {
         if (err) return next(new Error("Cannot update user _"));
         user.isTravelling = false;
-        let cash = 0;
         let totalCash = user.history.reduce((cash, c) => {
             return cash + !c.cash ? 0 : c.cash;
         });
