@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
+const Travel = require('./Travel');
 
 const User = new mongoose.Schema({
     name:           { type: String },

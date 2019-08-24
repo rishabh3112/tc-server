@@ -1,7 +1,8 @@
 const path = require('path');
 const passport = require('passport');
+const mongoose = require('mongoose');
 const User = require('../models/User');
-const Travel = require('../models/Travel');
+const Travel = mongoose.model('Travel', require('../models/Travel'));
 const router = require('express').Router();
 
 const VERSION = require(path.resolve(__dirname, '../package.json')).version;
