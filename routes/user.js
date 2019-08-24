@@ -46,7 +46,7 @@ router.post('/travel', (req, res, next) => {
 
     req.user.isTravelling = true;
     
-    User.findOne({username: req.body.username}, (err, user) => {
+    User.findOne({username: req.user.username}, (err, user) => {
         if (err) return next(new Error("Cannot update user"));
         user.isTravelling = true;
         user.history.unshift(newTravel);
@@ -59,7 +59,7 @@ router.post('/travel', (req, res, next) => {
 router.get('/endtravel', (req, res, next) => {
     if (!req.isAuthenticated() || !req.user.isUser || !req.user.isTravelling) return next(new Error("Invalid Access _"));
 
-    User.findOne({usename: req.body.username}, (err, user) => {
+    User.findOne({usename: req.user.username}, (err, user) => {
         if (err) return next(new Error("Cannot update user _"));
         user.isTravelling = false;
         user.cash += user.history[0].cash;
