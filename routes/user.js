@@ -15,7 +15,7 @@ router.get('/status', (req, res, next) => {
 })
 
 router.post('/register', (req, res, next) => {
-    User.register(new User({username: req.body.username, name: req.body.name, age: req.body.age, gender: req.body.gender}), req.body.password, (err) => {
+    User.register(new User({username: req.body.username, name: req.body.name[0].toUpperCase() + req.body.name.slice(1), age: req.body.age, gender: req.body.gender}), req.body.password, (err) => {
         if (err) return next(err);
     })
     process.log.info(`New User ${req.body.name}("${req.body.username}") added 🎉`)
