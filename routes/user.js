@@ -41,7 +41,7 @@ router.post('/travel', (req, res, next) => {
         start: req.body.start,
         end: req.body.end,
         distance: req.body.distance,
-        coins: req.body.cash,
+        cash: req.body.cash,
     })
 
     req.user.isTravelling = true;
