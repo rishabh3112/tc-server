@@ -62,7 +62,11 @@ router.get('/endtravel', (req, res, next) => {
     User.findOne({usename: req.user.username}, (err, user) => {
         if (err) return next(new Error("Cannot update user _"));
         user.isTravelling = false;
-        user.cash += user.history[0].cash;
+        let cash = 0;
+        user.history.map((el) => {
+            cash += el.cash;
+        });
+        user.cash = cash;
         user.save();
     })
     req.user.isTravelling = false;
