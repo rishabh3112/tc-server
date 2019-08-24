@@ -1,6 +1,7 @@
 const path = require('path');
 const passport = require('passport');
 const User = require('../models/User');
+const Travel = require('../models/Travel');
 const router = require('express').Router();
 
 const VERSION = require(path.resolve(__dirname, '../package.json')).version;
@@ -30,6 +31,41 @@ router.get('/logout', function(req, res, next) {
     if (!req.user.isUser) return next(new Error("Vendor can't request on user"));
     req.logout();
     res.json({ success: true});
+});
+
+router.post('/travel', (req, res, next) => {
+    if (!req.isAuthenticated() || !req.user.isUser) return next(new Error("Invaild Access"));
+    
+    newTravel = new Travel({
+        start: req.body.start,
+        end: req.body.end,
+        distance: req.body.distance,
+        coins: req.body.cash,
+    })
+
+    req.user.isTravelling = true;
+    
+    User.findOne({username: req.body.username}, (err, user) => {
+        if (err) return next(new Error("Cannot update user"));
+        user.isTravelling = true;
+        user.history.unshift(newTravel);
+        user.save();
+    })
+    
+    req.json({success: true});
+});
+
+router.get('/endtravel', (req, res, next) => {
+    if (!req.isAuthenticated() || !req.user.isUser || !req.user.isTravelling) return next(new Error("Invalid Access _"));
+
+    User.findOne({usename: req.body.username}, (err, user) => {
+        if (err) return next(new Error("Cannot update user _"));
+        user.isTravelling = false;
+        user.cash += user.history[0].cash;
+        user.save();
+    })
+    req.user.isTravelling = false;
+    req.json({success: true});
 });
 
 module.exports = router;
