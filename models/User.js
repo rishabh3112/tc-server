@@ -18,7 +18,10 @@ const User = new mongoose.Schema({
     isTraveling:    { type: Boolean },
     history:        [Travel],
     travel:         Travel,
-    isUser:         {type: Boolean, default: true}
+    isUser:         {type: Boolean, default: true},
+    owner:          {type: String},
+    address:        {type: String},
+    type:           {type: String},
 })
 
 User.plugin(passportLocalMongoose);

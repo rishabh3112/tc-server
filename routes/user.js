@@ -6,7 +6,10 @@ const router = require('express').Router();
 const VERSION = require(path.resolve(__dirname, '../package.json')).version;
 
 router.get('/status', (req, res) => {
-    if (req.isAuthenticated()) res.json({ user: req.user, message: `Travel Cash v${VERSION}`, authentication: true })
+    if (req.isAuthenticated()) {
+        if (!req.user.isUser) return next(new Error("Vendor can't request on user"));
+        res.json({ user: req.user, message: `Travel Cash v${VERSION}`, authentication: true })
+    }
     else res.json({ authentication: false })
 })
 
@@ -19,10 +22,12 @@ router.post('/register', (req, res, next) => {
 });
 
 router.post('/login', passport.authenticate('local', {session: true}), function(req, res) {
+    if (!req.user.isUser) return next(new Error("Vendor can't request on user"));
     res.json({ success: true})
 });
 
 router.get('/logout', function(req, res) {
+    if (!req.user.isUser) return next(new Error("Vendor can't request on user"));
     req.logout();
     res.json({ success: true});
 });
